@@ -1,28 +1,48 @@
 import pytest
-# TODO: add necessary import
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from ml.model import train_model, inference, compute_model_metrics
 
-# TODO: implement the first test. Change the function name and input as needed
-def test_one():
-    """
-    # add description for the first test
-    """
-    # Your code here
-    pass
+@pytest.fixture
+def sample_data():
+    """Provides sample training data with at least 3 samples for cross-validation"""
+    X = np.array([
+        [0, 1, 0, 1],
+        [1, 0, 1, 0],
+        [0, 0, 1, 1],
+        [1, 1, 0, 0],
+        [1, 0, 0, 1],
+        [0, 1, 1, 0]
+    ])
+    y = np.array([0, 1, 0, 1, 1, 0])
+    return X, y
 
 
-# TODO: implement the second test. Change the function name and input as needed
-def test_two():
+def test_train_model_returns_model(sample_data):
     """
-    # add description for the second test
+    Test that train_model returns a trained RandomForestClassifier
     """
-    # Your code here
-    pass
+    X, y = sample_data
+    model = train_model(X, y)
+    assert isinstance(model, RandomForestClassifier)
 
+def test_inference_shape(sample_data):
+    """
+    Test that inference returns predictions of the correct shape
+    """
+    X, y = sample_data
+    model = train_model(X, y)
+    preds = inference(model, X)
+    assert preds.shape == y.shape
 
-# TODO: implement the third test. Change the function name and input as needed
-def test_three():
+def test_compute_model_metrics_returns_all(sample_data):
     """
-    # add description for the third test
+    Test that compute_model_metrics returns precision, recall, and fbeta as floats
     """
-    # Your code here
-    pass
+    _, y = sample_data
+    preds = y  # simulate perfect predictions
+    precision, recall, fbeta = compute_model_metrics(y, preds)
+    assert isinstance(precision, float)
+    assert isinstance(recall, float)
+    assert isinstance(fbeta, float)
+    assert precision == recall == fbeta == 1.0
