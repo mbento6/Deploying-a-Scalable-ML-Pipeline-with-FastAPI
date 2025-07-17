@@ -1,29 +1,93 @@
-Working in a command line environment is recommended for ease of use with git and dvc. If on Windows, WSL1 or 2 is recommended.
+# Deploying a Scalable ML Pipeline with FastAPI
 
-# Environment Set up (pip or conda)
-* Option 1: use the supplied file `environment.yml` to create a new environment with conda
-* Option 2: use the supplied file `requirements.txt` to create a new environment with pip
-    
-## Repositories
-* Create a directory for the project and initialize git.
-    * As you work on the code, continually commit changes. Trained models you want to use in production must be committed to GitHub.
-* Connect your local git repo to GitHub.
-* Setup GitHub Actions on your repo. You can use one of the pre-made GitHub Actions if at a minimum it runs pytest and flake8 on push and requires both to pass without error.
-    * Make sure you set up the GitHub Action to have the same version of Python as you used in development.
+This project demonstrates how to build, train, and deploy a machine learning model using a complete MLOps pipeline. The model is trained to predict whether an individual earns more than $50,000 per year using demographic data from the census dataset. The project includes data processing, model training and evaluation, RESTful API deployment using FastAPI, and automated testing and integration using GitHub Actions.
 
-# Data
-* Download census.csv and commit it to dvc.
-* This data is messy, try to open it in pandas and see what you get.
-* To clean it, use your favorite text editor to remove all spaces.
+GitHub repository: https://github.com/mbento6/Deploying-a-Scalable-ML-Pipeline-with-FastAPI.git
 
-# Model
-* Using the starter code, write a machine learning model that trains on the clean data and saves the model. Complete any function that has been started.
-* Write unit tests for at least 3 functions in the model code.
-* Write a function that outputs the performance of the model on slices of the data.
-    * Suggestion: for simplicity, the function can just output the performance on slices of just the categorical features.
-* Write a model card using the provided template.
+## Features
 
-# API Creation
-*  Create a RESTful API using FastAPI this must implement:
-    * GET on the root giving a welcome message.
-    * POST that does model inference.
+- Data cleaning and feature engineering
+- Model training using RandomForestClassifier
+- Evaluation metrics: precision, recall, and F1 score
+- Slice-based performance metrics for fairness analysis
+- FastAPI-based RESTful service for model inference
+- GET and POST endpoints
+- Input validation using Pydantic
+- Unit tests using pytest
+- Continuous integration using GitHub Actions
+
+## File Structure
+
+├── data/ Raw input data
+├── model/ Trained model, encoder, and label binarizer
+├── ml/
+│ ├── data.py Functions for processing data
+│ ├── model.py Functions for training and inference
+├── main.py FastAPI application
+├── local_api.py Sends GET and POST requests for testing
+├── slice_output.txt Slice-based model performance results
+├── test_ml.py Unit tests
+├── model_card.md Model documentation
+├── screenshots/
+│ └── continuous_integration.png
+├── .github/workflows/
+│ └── main.yml CI configuration
+├── requirements.txt Project dependencies
+├── README.md Project overview
+
+
+## Running the Application Locally
+
+1. Clone the repository:
+
+git clone https://github.com/mbento6/Deploying-a-Scalable-ML-Pipeline-with-FastAPI.git
+cd Deploying-a-Scalable-ML-Pipeline-with-FastAPI
+
+2. Create and activate a virtual environment:
+
+conda create -n fastapi python=3.10 -y
+conda activate fastapi
+pip install -r requirements.txt
+
+
+3. Train the model and save artifacts:
+
+python train_model.py
+
+
+4. Start the FastAPI server:
+
+uvicorn main:app --reload
+
+Visit the Swagger UI at http://127.0.0.1:8000/docs to interact with the API.
+
+5. Test the API locally:
+
+python local_api.py
+
+## Running Tests
+
+To run the unit tests:
+
+pytest test_ml.py -v
+
+
+## Continuous Integration
+
+This project uses GitHub Actions to perform automated testing and linting. A screenshot showing the passing workflow is included at:
+
+`screenshots/continuous_integration.png`
+
+## Submission Details
+
+Public GitHub repository: https://github.com/mbento6/Deploying-a-Scalable-ML-Pipeline-with-FastAPI.git  
+The GitHub repository link is also included in this README and should be provided in the "Submission Details" section upon submission.
+
+## Author
+
+Mike Benton  
+Email: mbento6@wgu.edu
+
+## License
+
+This project is licensed for educational purposes only.
